@@ -1,8 +1,8 @@
 #!/bin/python
+from __future__ import print_function
 import sys
 import re
 import os
-
 
 def get_files_from_dir(path, extension):
     filelist = []
@@ -32,10 +32,13 @@ def xsh_to_ssh(xsh_file):
 
     if values['Protocol'] != 'SSH':
         return 1
-    print('Host ' + os.path.basename(xsh_file)[:-4])
-    print('\tHostName ' + values['Host'])
-    print('\tPort ' + values['Port'])
-    print('\tUser ' + values['UserName'])
+    values['HostName'] = os.path.basename(xsh_file)[:-4].replace(" ", "-")
+    print('Host ' + values['HostName'])
+    print(' HostName ' + values['Host'])
+    if values['Port'] != '':
+        print(' Port ' + values['Port'])
+    if values['UserName'] != '':
+        print(' User ' + values['UserName'])
 
 def main(argv):
     extension = 'xsh'
@@ -46,7 +49,7 @@ def main(argv):
 
     for xsh in filelist:
         xsh_to_ssh(xsh)
-        print('\n')
+        print()
 
 if __name__ == '__main__':
     main(sys.argv)
